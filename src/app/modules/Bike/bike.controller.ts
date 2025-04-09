@@ -35,6 +35,7 @@ const getSingleBike = catchAsync(async (req, res) => {
 const updateBike = catchAsync(async (req, res) => {
   const { id } = req.params;
   const files = req.files as { [key: string]: Express.Multer.File[] };
+
   const result = await BikeServices.updateBikeIntoDB(id, req.body, files);
   sendResponse(res, {
     statusCode: 200,

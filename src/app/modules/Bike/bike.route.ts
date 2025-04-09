@@ -15,7 +15,7 @@ const router = express.Router();
 router.post(
   '/',
   auth(USER_Role.admin, USER_Role.super_admin),
-  uploadMultipleImages([{ name: 'bikeImages', maxCount: 5 }]) as any,
+  uploadMultipleImages([{ name: 'images', maxCount: 5 }]) as any,
   validateFileRequest(UploadedFilesArrayZodSchema),
   parseBodyForFormData,
   validateRequest(BikeValidation.createBikeValidationSchema),
@@ -27,7 +27,7 @@ router.get('/:id', BikeController.getSingleBike);
 router.put(
   '/:id',
   auth(USER_Role.admin, USER_Role.super_admin),
-  uploadMultipleImages([{ name: 'bikeImages', maxCount: 5 }]) as any,
+  uploadMultipleImages([{ name: 'images', maxCount: 5 }]) as any,
   validateFileRequest(UploadedFilesArrayZodSchema),
   parseBodyForFormData,
   validateRequest(BikeValidation.updateBikeValidationSchema),

@@ -10,7 +10,7 @@ const CreateBikeIntoDB = async (
   payload: TBike,
   files?: { [key: string]: Express.Multer.File[] },
 ) => {
-  const imageFields = ['bikeImages'];
+  const imageFields = ['images'];
   imageFields.forEach((field) => {
     if (files?.[field]) {
       (payload as any)[field] = mapImagePaths(files[field]);
@@ -161,7 +161,7 @@ const updateBikeIntoDB = async (
   payload: Partial<TBike>,
   files?: { [key: string]: Express.Multer.File[] },
 ) => {
-  const imageFields = ['bikeImages'];
+  const imageFields = ['images'];
   imageFields.forEach((field) => {
     if (files?.[field]) {
       (payload as any)[field] = mapImagePaths(files[field]);
@@ -169,6 +169,7 @@ const updateBikeIntoDB = async (
       (payload as any)[field] = [];
     }
   });
+
   const result = await Bike.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
     runValidators: true,
