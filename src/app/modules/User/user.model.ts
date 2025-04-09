@@ -2,8 +2,8 @@
 import { Schema, model } from 'mongoose';
 import { Tuser } from './user.interface';
 import { USER_Role } from './user.constants';
-import bcrypt from 'bcrypt';
-import config from '../../config';
+import bcrypt from 'bcryptjs';
+import { config } from '../../config';
 
 const userSchema = new Schema<Tuser>(
   {
@@ -12,11 +12,18 @@ const userSchema = new Schema<Tuser>(
     password: { type: String, required: true, select: 0 },
     phone: { type: String, required: true },
     address: { type: String, required: true },
+    profileImg: {
+      type: String,
+    },
     role: {
       type: String,
       required: [true, 'Role is required'],
       enum: Object.keys(USER_Role),
     },
+    passwordChangedAt: {
+      type: Date,
+    },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
@@ -30,12 +37,18 @@ userSchema.methods.toJSON = function () {
   return user;
 };
 
+//password hash by bcrypt
 userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_round),
-  );
+  // Only hash the password if it has been modified (i.e., during password changes). With this update, when you change fields like status or any other non-password-related fields, the password will remain unchanged in the database.
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(
+      user.password,
+      Number(config.bcrypt_salt_rounds),
+    );
+  }
+
   next();
 });
 
@@ -50,6 +63,16 @@ export const isPasswordMatched = async (
 ): Promise<boolean> => {
   const isMatched = await bcrypt.compare(plainPassword, hashedPassword);
   return isMatched;
+};
+
+//check if password changed after the token was issued. if that then the previous jwt token will be invalid
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+  passwordChangedTimestamp: Date,
+  jwtIssuedTimestamp: number,
+) {
+  const passwordChangedTime =
+    new Date(passwordChangedTimestamp).getTime() / 1000; //at first getTime () method converts the UTC time in seconds then it convert in miliseconds / 1000
+  return passwordChangedTime > jwtIssuedTimestamp;
 };
 
 export const User = model<Tuser>('User', userSchema);

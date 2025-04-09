@@ -3,9 +3,6 @@ import { z } from 'zod';
 const createBikeValidationSchema = z.object({
   body: z.object({
     name: z.string().min(1, 'Name is required'),
-    image: z.array(z.string().url(), {
-      required_error: 'Product images are required',
-    }),
     description: z.string().min(1, 'Description is required'),
     pricePerHour: z.number().min(0, 'Price per hour must be a positive number'),
     isAvailable: z.boolean().optional(), // Optional since it defaults to true

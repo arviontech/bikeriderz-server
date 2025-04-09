@@ -1,10 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import { Types } from 'mongoose';
 import { Booking } from '../Booking/booking.model';
 import { TBike } from './bike.interface';
 import { Bike } from './bike.model';
+import { mapImagePaths } from '../../Utills/ImagePathUtilityFuntion';
 
-const CreateBikeIntoDB = async (payload: TBike) => {
+const CreateBikeIntoDB = async (
+  payload: TBike,
+  files?: { [key: string]: Express.Multer.File[] },
+) => {
+  const imageFields = ['bikeImages'];
+  imageFields.forEach((field) => {
+    if (files?.[field]) {
+      (payload as any)[field] = mapImagePaths(files[field]);
+    } else {
+      (payload as any)[field] = [];
+    }
+  });
+
   const newBike = await Bike.create(payload);
   return newBike;
 };
@@ -142,7 +156,19 @@ const getSingleBikesFromDB = async (id: string) => {
   return result;
 };
 
-const updateBikeIntoDB = async (id: string, payload: Partial<TBike>) => {
+const updateBikeIntoDB = async (
+  id: string,
+  payload: Partial<TBike>,
+  files?: { [key: string]: Express.Multer.File[] },
+) => {
+  const imageFields = ['bikeImages'];
+  imageFields.forEach((field) => {
+    if (files?.[field]) {
+      (payload as any)[field] = mapImagePaths(files[field]);
+    } else {
+      (payload as any)[field] = [];
+    }
+  });
   const result = await Bike.findByIdAndUpdate({ _id: id }, payload, {
     new: true,
     runValidators: true,

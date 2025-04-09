@@ -3,7 +3,8 @@ import sendResponse from '../../Utills/sendResponse';
 import { BikeServices } from './bike.services';
 
 const createBike = catchAsync(async (req, res) => {
-  const result = await BikeServices.CreateBikeIntoDB(req.body);
+  const files = req.files as { [key: string]: Express.Multer.File[] };
+  const result = await BikeServices.CreateBikeIntoDB(req.body, files);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -33,7 +34,8 @@ const getSingleBike = catchAsync(async (req, res) => {
 
 const updateBike = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await BikeServices.updateBikeIntoDB(id, req.body);
+  const files = req.files as { [key: string]: Express.Multer.File[] };
+  const result = await BikeServices.updateBikeIntoDB(id, req.body, files);
   sendResponse(res, {
     statusCode: 200,
     success: true,

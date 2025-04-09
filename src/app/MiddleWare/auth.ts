@@ -1,11 +1,12 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../Utills/catchAsync';
 import { NextFunction, Request, Response } from 'express';
-import config from '../config';
+
 import { User } from '../modules/User/user.model';
 import { TUserRole } from '../modules/User/user.interface';
 import AppError from '../Error/AppError';
 import httpStatus from 'http-status';
+import { config } from '../config';
 
 export const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {

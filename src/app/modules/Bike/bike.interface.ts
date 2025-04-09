@@ -1,6 +1,6 @@
 export type TBike = {
   name: string;
-  image: string[];
+  images: string[];
   description: string;
   pricePerHour: number;
   isAvailable: boolean;

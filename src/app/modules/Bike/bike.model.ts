@@ -4,7 +4,7 @@ import { TBike } from './bike.interface';
 const bikeSchema = new Schema<TBike>(
   {
     name: { type: String, required: true },
-    image: { type: [String], required: [true, 'Product image is required'] },
+    images: { type: [String], required: [true, 'Product image is required'] },
     description: { type: String, required: true },
     pricePerHour: { type: Number, required: true },
     isAvailable: { type: Boolean, default: true },

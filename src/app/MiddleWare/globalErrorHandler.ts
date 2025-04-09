@@ -6,7 +6,7 @@ import handleValidationError from '../Error/handleValidationError';
 import handleCastError from '../Error/handleCastError';
 import AppError from '../Error/AppError';
 import handleDuplicateError from '../Error/handleDuplicateError';
-import config from '../config';
+import { config } from '../config';
 
 const globalErrorHandler = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

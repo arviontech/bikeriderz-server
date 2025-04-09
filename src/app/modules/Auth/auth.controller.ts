@@ -1,6 +1,6 @@
 import catchAsync from '../../Utills/catchAsync';
 import sendResponse from '../../Utills/sendResponse';
-import config from '../../config';
+
 import { AuthServices } from './auth.services';
 
 const signUp = catchAsync(async (req, res) => {
@@ -16,11 +16,13 @@ const signUp = catchAsync(async (req, res) => {
 
 const logIn = catchAsync(async (req, res) => {
   const result = await AuthServices.logIn(req.body);
-  const { accessToken, refereshToken, userData } = result;
+  const { accessToken, refreshToken, userData } = result;
 
-  res.cookie('refreshToken', refereshToken, {
+  res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: config.NODE_ENV === 'production',
+    sameSite: 'none',
+    // domain: 'cpc.atctechltd.com',
+    secure: true,
   });
 
   sendResponse(res, {

@@ -1,4 +1,5 @@
 import AppError from '../../Error/AppError';
+import { TImageFile } from '../../Interface/image.interface';
 import { Tuser } from './user.interface';
 import { User } from './user.model';
 
@@ -24,6 +25,7 @@ const updateUserIntoDB = async (
   role: string,
   payload: Partial<Tuser>,
   id?: string, // id is optional
+  profileImg?: TImageFile,
 ) => {
   const userQuery = id ? { _id: id } : { email }; // Use ID if present, otherwise use email
 
@@ -47,10 +49,16 @@ const updateUserIntoDB = async (
       'You do not have permission to change your role to admin',
     );
   }
+  const profileImagePath = (profileImg && profileImg.path) || '';
+
+  const userData = {
+    ...payload,
+    profileImg: profileImagePath,
+  };
 
   const updatedUser = await User.findOneAndUpdate(
     { $or: [{ _id: id }, { email }] },
-    { $set: payload },
+    { $set: userData },
     {
       new: true,
       runValidators: true,

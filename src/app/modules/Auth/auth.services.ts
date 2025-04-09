@@ -1,8 +1,9 @@
-import config from '../../config';
+import { config } from '../../config';
+import { jwtHelpers } from '../../Utills/JWTHelpers';
 import { Tuser } from '../User/user.interface';
 import { User, isPasswordMatched } from '../User/user.model';
 import { TLoginUser } from './auth.interface';
-import jwt from 'jsonwebtoken';
+import { Secret } from 'jsonwebtoken';
 const signUp = async (payload: Tuser) => {
   //user existence check
   const user = await User.findOne({ email: payload.email });
@@ -33,21 +34,23 @@ const logIn = async (payload: TLoginUser) => {
     throw new Error('Password not matched');
   }
 
-  const jwtPayload = {
+  const JwtPayload = {
     email: user.email,
     role: user.role,
-    _id: user._id,
+    phone: user.phone,
+    profileImg: user.profileImg,
+    id: user._id,
   };
 
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
-    expiresIn: config.jwt_access_expire_in as string,
-  });
-  const refereshToken = jwt.sign(
-    jwtPayload,
-    config.jwt_refresh_secret as string,
-    {
-      expiresIn: config.jwt_refresh_expire_in as string,
-    },
+  const accessToken = jwtHelpers.generateToken(
+    JwtPayload,
+    config.jwt_access_secret as Secret,
+    config.jwt_access_expire_in as string,
+  );
+  const refreshToken = jwtHelpers.generateToken(
+    JwtPayload,
+    config.jwt_refresh_secret as Secret,
+    config.jwt_refresh_expire_in as string,
   );
 
   const userData = {
@@ -56,10 +59,11 @@ const logIn = async (payload: TLoginUser) => {
     email: user.email,
     phone: user.phone,
     address: user.address,
+    profileImg: user.profileImg,
     role: user.role,
   };
 
-  return { accessToken, refereshToken, userData };
+  return { accessToken, refreshToken, userData };
 };
 
 export const AuthServices = {
