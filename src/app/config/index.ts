@@ -17,6 +17,7 @@ export const config = {
     PHONE: process.env.SUPERADMIN_PHONE || '',
     PASSWORD: process.env.SUPERADMIN_PASSWORD || '',
     ROLE: process.env.SUPERADMIN_ROLE || '',
+    SUPERADMIN_NID: process.env.SUPERADMIN_NID || '',
     IS_DELETED: process.env.SUPERADMIN_ISDELETED,
   },
 

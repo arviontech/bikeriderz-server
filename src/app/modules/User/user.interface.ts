@@ -6,7 +6,8 @@ export type Tuser = {
   email: string;
   password: string;
   phone: string;
-  address: string;
+  address?: string;
+  nidCardNo: string;
   profileImg?: string;
   role: keyof typeof USER_Role;
   isDeleted?: boolean;

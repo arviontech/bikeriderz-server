@@ -11,7 +11,8 @@ const userSchema = new Schema<Tuser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: 0 },
     phone: { type: String, required: true },
-    address: { type: String, required: true },
+    address: { type: String },
+    nidCardNo: { type: String, required: true },
     profileImg: {
       type: String,
     },

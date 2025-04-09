@@ -8,6 +8,7 @@ const superAdminData = {
   phone: config.SUPERADMIN.PHONE,
   password: config.SUPERADMIN.PASSWORD,
   role: config.SUPERADMIN.ROLE,
+  nidCardNo: config.SUPERADMIN.SUPERADMIN_NID,
   // isDeleted: config.SUPERADMIN.IS_DELETED,
 };
 
