@@ -21,7 +21,7 @@ const logIn = catchAsync(async (req, res) => {
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     sameSite: 'none',
-    // domain: 'cpc.atctechltd.com',
+    domain: 'bikeriderz.arviontech.online',
     secure: true,
   });
 
